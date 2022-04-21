@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.apache.commons.lang3.BooleanUtils.and;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,27 +31,25 @@ public class SpartanTestWithParameters extends SpartansTestBase {
     public void test1() {
 
 
+        Response response = given()
+                .accept(ContentType.JSON)
+                .and()
+                .pathParam("abc", 5)
+                .when()
+                .get("/api/spartans/{abc}");
 
-
-            Response response =  given()
-                    .accept(ContentType.JSON)
-                    .and()
-                    .pathParam("abc",5)
-                    .when()
-                    .get("/api/spartans/{abc}");
-
-            //verify status code
-            assertEquals(200,response.statusCode());
-            //verify content type
-            assertEquals("application/json",response.contentType());
-            //verify "Blythe" inside the payload
-            assertTrue(response.body().asString().contains("Blythe"));
+        //verify status code
+        assertEquals(200, response.statusCode());
+        //verify content type
+        assertEquals("application/json", response.contentType());
+        //verify "Blythe" inside the payload
+        assertTrue(response.body().asString().contains("Blythe"));
 
     }
 
 
     @Test
-    public void test2(){
+    public void test2() {
 
          /*
         TASK
@@ -63,21 +64,93 @@ public class SpartanTestWithParameters extends SpartansTestBase {
         Response response = given()
                 .accept(ContentType.JSON)
                 .and()
-                .pathParam("id",500)
+                .pathParam("id", 500)
                 .when()
-                .get("/api/spartans/{id}") ;
+                .get("/api/spartans/{id}");
 
+
+        // verify status code
         assertEquals(404, response.statusCode());
-        assertEquals("application/json", response.contentType());
+
+        //verify content type
+        // assertEquals("application/json", response.contentType());
+        assertEquals("application/json", response.header("Content-Type"));
+
+        // verify message body
         assertTrue(response.body().asString().contains("Not Found"));
 
+        System.out.println("response.prettyPrint() = " + response.prettyPrint());
 
 
+    }
+    // HOW TO PASS QUERY PARAMETERS WITH REST-ASSURED LIBRARY
+    @DisplayName("GET request to /api/spartans/search")
+    @Test
+    public void test3() {
+        /**
+         *         Given accept type is Json
+         *         And query parameter values are:
+         *         gender|Female
+         *         nameContains|e
+         *         When user sends GET request to /api/spartans/search
+         *         Then response status code should be 200
+         *         And response content-type: application/json
+         *         And "Female" should be in response payload
+         *         And "Janette" should be in response payload
+         */
+
+        /**
+         * IF YOU WANT TO GET ON CONSOLE YOUR INPUT
+         * log().all()
+         * log().parameters()
+         * log().uri()
+         *
+         */
+
+
+        Response response = given().log().all()
+
+                .accept(ContentType.JSON)
+                .and().queryParam("gender","Female")
+                .and().queryParam("nameContains","e")
+                .when().get("/api/spartans/search");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json",response.contentType());
+        assertTrue(response.body().asString().contains("Female"));
+        assertTrue(response.body().asString().contains("Janette"));
 
 
 
     }
+    @DisplayName("GET request to /api/spartans/search")
+    @Test
+    public void testCollection(){
+        /**
+         * same task  with Map
+         */
 
+        //create a map and store query params information
+        Map<String,Object> queryMap = new HashMap<>();
+        queryMap.put("gender","Female");
+        queryMap.put("nameContains","e");
+
+        Response response = given().log().all().
+                accept(ContentType.JSON).
+                queryParams(queryMap)
+                .when().
+                get("/api/spartans/search");
+
+        //verify status code
+        assertEquals(200,response.statusCode());
+        //verify content type
+        assertEquals("application/json",response.contentType());
+        //verify Female inside body
+        assertTrue(response.body().asString().contains("Female"));
+        //verify Janette inside the json body
+        assertTrue(response.body().asString().contains("Janette"));
+
+    }
 
 
 }
