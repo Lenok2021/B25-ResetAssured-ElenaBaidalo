@@ -43,7 +43,6 @@ public class HrTestWithParameters extends HrTestBase {
        assertEquals("application/json", response.contentType());
        assertTrue(response.body().asString().contains("United States of America"));
 
-
     }
 
 
