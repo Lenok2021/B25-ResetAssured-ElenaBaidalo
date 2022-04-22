@@ -3,12 +3,12 @@ package com.cydeo.day3;
 import com.cydeo.utilities.SpartansTestBase;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -117,23 +117,196 @@ public class Practice extends SpartansTestBase {
 
 
         assertEquals(200, response.statusCode());
-        assertEquals("application/json",response.contentType());
-        assertTrue(response.body().asString().contains("Nels")) ;
+        assertEquals("application/json", response.contentType());
+        assertTrue(response.body().asString().contains("Nels"));
 
     }
 
     @Test
-    public void test7(){
+    public void test7() {
 
         Response response = given()
                 .accept(ContentType.JSON)
-                .queryParam("gender","Female")
-                .when().get("/api/spartans/search") ;
+                .queryParam("gender", "Female")
+                .when().get("/api/spartans/search");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+        assertTrue(response.body().asString().contains("Bunnie"));
+
+
+    }
+
+    @Test
+    public void test8() {
+
+/*
+        Given accept type is Json
+        And query parameter values are:
+        gender | Female
+        nameContains | e
+        When user sends GET request to /api / spartans / search
+        Then response status code should be 200
+        And response content - type:application / json
+        And "Female" should be in response payload
+        And "Janette" should be in response payload
+         */
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .queryParam("gender", "Female")
+                .queryParams("nameContains", "e")
+                .when()
+                .get("/api/spartans/search");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+        assertTrue(response.body().asString().contains("Female"));
+        assertTrue(response.body().asString().contains("Janette"));
+        assertTrue(response.body().asString().contains("Paige"));
+
+    }
+
+    @Test
+    public void test9() {
+        /*
+        Given except type is Json
+        And query parameter values are:
+        gender | Female
+        nameContains | e
+        When user sends GET request to /api / spartans / search
+        Then response status code should be 200
+        And response content - type:application / json
+        And "Female" should be in response payload
+        And "Janette" should be in response payload
+         */
+
+
+    }
+
+    @Test
+    public void test10() {
+        //  let's add  as Map
+        Map<String, String> mapQuery = new HashMap<>();
+        mapQuery.put("gender", "Male");
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .queryParams(mapQuery)
+                .when()
+                .get("/api/spartans/search");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+
+        assertTrue(response.body().asString().contains("Rodolfo"));
+        assertTrue(response.body().asString().contains("Franky"));
+
+    }
+
+    @Test
+    public void test11() {
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .and()
+                .pathParam("id", 10)
+                .when()
+                .get("api/spartans/{id}");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+
+        int id = response.path("id");
+        String name = response.path("name");
+        String gender = response.path("gender");
+        long phone = response.path("phone");
+
+        //verify each value
+        assertEquals(10, id);
+        assertEquals("Lorenza", name);
+        assertEquals("Female", gender);
+        assertEquals(3312820936l, phone);
+    }
+
+    @Test
+    public void test12() {
+        // let's get the first id
+        // first name
+        Response response = given().log().all()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/api/spartans");
+
+        int first_ID = response.path("id[0]");
+        System.out.println(first_ID);
+
+        String firstName = response.path("name[0]");
+        System.out.println("firstName = " + firstName);
+
+        // find the last name
+
+        String lastName = response.path("name[-1]");
+        System.out.println("lastName = " + lastName);
+
+
+    }
+
+    @Test
+    public void test13() {
+
+
+        /*
+        /**
+     * /*
+     * Given accept type is json
+     * And path param id is 10
+     * When user sends a get request to "api/spartans/{id}"
+     * Then status code is 200
+     * And content-type is "application/json"
+     * And response payload values match the following:
+     * id is 10,
+     * name is "Lorenza",
+     * gender is "Female",
+     * phone is 3312820936
+     */
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .and().pathParam("id", 10)
+                .when().get("api/spartans/{id}");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+        System.out.println("response.body().prettyPrint() = " + response.body().prettyPrint());
+
+        JsonPath jsonPath =  response.jsonPath() ;
+
+        int id = jsonPath.getInt("id");
+        String name = jsonPath.getString("name");
+        String gender = jsonPath.getString("gender");
+        long phone = jsonPath.getLong("phone");
+
+        System.out.println("id = " + id);
+        System.out.println("name = " + name);
+        System.out.println("gender = " + gender);
+        System.out.println("phone = " + phone);
+
+        assertEquals(10,id);
+
 
 
 
 
     }
+
+
+
 }
+
+
+
+
+
 
 

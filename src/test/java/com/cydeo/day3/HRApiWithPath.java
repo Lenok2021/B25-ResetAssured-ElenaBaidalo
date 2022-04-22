@@ -67,7 +67,7 @@ public class HRApiWithPath extends HrTestBase {
 
         List<String> jobID = response.path("items.job_id");
 
-
+        System.out.println("jobID = " + jobID);
         //assert one by one that they are equal to 2
         for (String eachJOBID : jobID) {
             assertEquals("IT_PROG", eachJOBID);
