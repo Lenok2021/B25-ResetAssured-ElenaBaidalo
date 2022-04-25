@@ -27,7 +27,7 @@ public class HamcrestMatchersIntro {
         assertThat(5 + 5, is(10));
         assertThat(5 + 5, equalTo(10));
 
-        //matchers has 2 overloaded version
+        //matcher has 2 overloaded version
         //first that accept actual value
         //second that accept another matchers
         assertThat(5 + 5, is(equalTo(10)));
@@ -37,8 +37,11 @@ public class HamcrestMatchersIntro {
         assertThat(5 + 5, is(not(equalTo(8))));
 
         //greaterThan()
+        assertThat(5+5, greaterThan(8));
         //greaterThanOrEqualTo()
+        assertThat(5+5,greaterThanOrEqualTo(10));
         //lessThan()
+        assertThat(5+5,lessThan(15));
         //lessThanOrEqualTo()
         assertThat(5 + 5, is(greaterThan(9)));
 
