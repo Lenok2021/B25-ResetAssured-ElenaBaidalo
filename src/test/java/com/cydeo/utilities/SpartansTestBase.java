@@ -5,7 +5,7 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
-public class SpartansTestBase {
+ public abstract class SpartansTestBase {
 
 
     //beforeAll is the same thing with beforeClass in testng
