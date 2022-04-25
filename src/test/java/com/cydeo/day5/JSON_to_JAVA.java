@@ -34,8 +34,6 @@ public class JSON_to_JAVA  extends SpartansTestBase {
         Map<String, Object> jsonMap = response.as(Map.class);
 
 
-
-
     }
 
 
