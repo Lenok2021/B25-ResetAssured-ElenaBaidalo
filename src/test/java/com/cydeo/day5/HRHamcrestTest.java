@@ -2,6 +2,7 @@ package com.cydeo.day5;
 
 import com.cydeo.utilities.HrTestBase;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -46,13 +47,31 @@ public class HRHamcrestTest extends HrTestBase {
                 .and()
                 .body("items.first_name", equalTo(names))
                 .body("items.job_id", everyItem(equalTo("IT_PROG")))
-                .body( "items.e-mail", notNullValue());
-
-
-
+                .body("items.e-mail", notNullValue());
 
 
     }
 
+    @Test
+    public void test2() {
+        //we want to chain with hamcrest and also get the response object.
+        JsonPath jsonPath = given()
 
+                .accept(ContentType.JSON)
+                .and()
+                .queryParam("q", "{\"job_id\":\"IT_PROG\"}")
+                .when()
+                .get("/employees")
+                .then()
+                .statusCode(200)
+                .body("items.job_id", everyItem(equalTo("IT_PROG")))
+                .extract().response().jsonPath();
+
+        //extract() --> method that allow us to get response object after we use then() method.
+
+        //assert that we have only 5 firstnames
+        assertThat(jsonPath.getList("items.first_name"), hasSize(5));
+
+
+    }
 }
