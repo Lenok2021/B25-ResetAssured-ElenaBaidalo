@@ -4,6 +4,9 @@ package com.cydeo.day5;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -75,4 +78,26 @@ public class HamcrestMatchersIntro {
 
 
     }
+
+    @DisplayName("Hamcrest for Collection")
+    @Test
+    public void testCollection() {
+
+        List<Integer> listOfNumbers = Arrays.asList(1, 4, 5, 6, 32, 54, 66, 43, 12, 312, 35);
+
+        //check size of the list
+        assertThat(listOfNumbers, hasSize(11));
+
+        //check if this list has Item 54
+        assertThat(listOfNumbers, hasItem(54));
+
+        //check if this list hasItems 6,54,43
+        assertThat(listOfNumbers, hasItems(6, 54, 43));
+
+        //check if all numbers are greater than 0
+        assertThat(listOfNumbers, everyItem(greaterThan(0)));
+
+
+    }
 }
+
