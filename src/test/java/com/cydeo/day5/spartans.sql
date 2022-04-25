@@ -1,0 +1,3 @@
+select SPARTAN_ID, name, GENDER,PHONE
+from SPARTANS
+where SPARTAN_ID = 15 ;
