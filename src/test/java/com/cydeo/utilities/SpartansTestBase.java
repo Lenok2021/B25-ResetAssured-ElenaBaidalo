@@ -1,10 +1,8 @@
 package com.cydeo.utilities;
 
-import com.cydeo.utilitiesDB.DB_Util;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 public class SpartansTestBase {
 
