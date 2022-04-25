@@ -16,28 +16,44 @@ import static org.hamcrest.Matchers.*;
 public class HamcrestMatcherCydeoStudent extends StudentCydeoBase {
 
 
-    @Test
-    public void test1() {
 
-        given()
-                .accept(ContentType.JSON)
-                .and()
-                .pathParam("id", 10423)
-                .when()
-                .get("/teacher/{id}")
-                .then()
-                .statusCode(200)
-                .and()
-                .contentType("application/json;charset=UTF-8")
-                .and()
-                .header("Content-Encoding", "gzip")
-                .and()
-                .header("Data", notNullValue())
-                .body("teachers[0].firstName", is("Alexander"),
-                "teachers[0].lastName", is("Syrup"),
-                "teachers[0].gender", equalTo("male"));
+        @DisplayName("CBTraining Teacher request with chaining and matchers")
+        @Test
+        public void test2(){
+            given()
+                    .accept(ContentType.JSON)
+                    .and()
+                    .pathParam("id",10423)
+                    .when()
+                    .get("/teacher/{id}")
+                    .then()
+                    .statusCode(200)
+                    .and()
+                    .contentType("application/json;charset=UTF-8")
+                    .and()
+                    .header("Content-Encoding","gzip")
+                    .and()
+                    .header("Date",notNullValue())
+                    .body("teachers[0].firstName",is("Alexander"),
+                            "teachers[0].lastName",is("Syrup"),
+                            "teachers[0].gender",equalTo("male"));
+
+        }
+
+        @Test
+        public void test3(){
+            //verify "Candi","Alexander","Francesca" inside the all teachers
+            given()
+                    .accept(ContentType.JSON)
+                    .when()
+                    .get("http://api.cybertektraining.com/teacher/all")
+                    .then()
+                    .statusCode(200)
+                    .and()
+                    .body("teachers.firstName",hasItems("Candi","Alexander","Francesca"));
+        }
+
+
 
     }
 
-
-}
