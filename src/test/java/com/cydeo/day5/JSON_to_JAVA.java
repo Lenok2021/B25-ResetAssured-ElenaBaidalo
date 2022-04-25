@@ -17,26 +17,43 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 public class JSON_to_JAVA  extends SpartansTestBase {
 
+    /**
+     * IQ  if you  want to convert json body to Java Map?
+     * you  use AS  method
+     * you need to add Jaskon Gson dependency
+     * This process called deserialization !!!!!!!!!!!!!
+     *
+     *
+     *
+     */
+
+
+
+
+    @DisplayName("GET one Spartan and deserialize to MAP")
     @Test
     public void test1(){
-        Response response =
-        given()
-                .accept(ContentType.JSON)
-                .pathParam("id",15)
-                .when()
-                .get("/api/spartans/{id}")
-                .then()
-                .statusCode(200)
-                .extract().response();  // we save response in Response Object
 
-        // get the json body and  convert to Map
+    Response response = given()
+            .accept(ContentType.JSON)
+            .pathParam("id",15)
+            .when()
+            .get("/api/spartans/{id}")
+            .then()
+            .statusCode(200)
+            .extract().response();
 
-        Map<String, Object> jsonMap = response.as(Map.class);
+    //get the json body and convert it to java map
 
+    Map<String,Object> jsonMap = response.as(Map.class);
 
-    }
+        System.out.println(jsonMap);
 
+    String name = (String) jsonMap.get("name");
+    //verify name is Meta
 
+    assertThat(name,is("Meta"));
+}
 
 
 
