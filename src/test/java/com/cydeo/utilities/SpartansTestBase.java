@@ -1,5 +1,6 @@
 package com.cydeo.utilities;
 
+import com.cydeo.utilitiesDB.DBUtils;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +17,7 @@ public class SpartansTestBase {
         String usernameSP = "SP";
         String passwordSP = "SP";
 
-        DB_Util.createConnection(urlSP,usernameSP,passwordSP);
+        DBUtils.createConnection(urlSP,usernameSP,passwordSP);
 
 
 
@@ -25,7 +26,7 @@ public class SpartansTestBase {
 
     @AfterAll
     public static void close(){
-        DB_Util.destroy();
+        DBUtils.destroy();
     }
 
 
