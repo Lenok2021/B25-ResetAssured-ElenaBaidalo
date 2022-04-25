@@ -20,7 +20,7 @@ public class JSON_to_JAVA  extends SpartansTestBase {
 
     /**
      * IQ  if you  want to convert json body to Java Map?
-     * you  use AS  method
+     * you  use AS !!!!!!!  method
      * you need to add Jaskon Gson dependency
      * This process called deserialization !!!!!!!!!!!!!
      *
