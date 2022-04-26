@@ -1,5 +1,7 @@
 package com.cydeo.day6;
 
+import com.cydeo.pojoStudentsCydeo.Student;
+import com.cydeo.pojoStudentsCydeo.Students;
 import com.cydeo.utilities.StudentCydeoBase;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
@@ -31,24 +33,8 @@ public class StudentCydeoPojoTest extends StudentCydeoBase {
                 .header("Content-Encoding","gzip")
                 .and()
                 .header("Date",notNullValue())
-                .body("students[0].firstName", is("Karole"))
+                .body("students[0].firstName",is("Karole"))
                 .extract().response();
-
-
-        // get Json Object
-        JsonPath jsonPath = response.jsonPath();
-
-
-
-
-        assertEquals("Karole", jsonPath.getString("students[0].firstName"));
-
-        assertEquals("Master of Creative Arts", jsonPath.getString("students[0].major"));
-        assertEquals("hassan.lebsack@hotmail.com", jsonPath.getString("students[0].contact.emailAddress"));
-        assertEquals("Legacy Integration Analyst", jsonPath.getString("students[0].company.companyName"));
-        assertEquals("6253 Willard Place", jsonPath.getString("students[0].company.address.street"));
-        assertEquals(28524, jsonPath.getInt("students[0].company.address.zipCode"));
-
 
         //payload/body verification
         /*
@@ -61,9 +47,24 @@ public class StudentCydeoPojoTest extends StudentCydeoBase {
         zipCode 28524                             --> students[0].company.address.zipCode
          */
 
+        Students students = response.as(Students.class);
+        System.out.println(students);
 
+        Student student1 = students.getStudents().get(0);
+
+        JsonPath jsonPath = response.jsonPath();
+
+        assertEquals("Karole",student1.getFirstName());
+        assertEquals(7,student1.getBatch());
+        assertEquals("Master of Creative Arts",student1.getMajor());
+        assertEquals("hassan.lebsack@hotmail.com",student1.getContact().getEmailAddress());
+        assertEquals("Legacy Integration Analyst",student1.getCompany().getCompanyName());
+        assertEquals("6253 Willard Place",student1.getCompany().getAddress().getStreet());
+        assertEquals(28524,student1.getCompany().getAddress().getZipCode());
 
     }
 
-
 }
+
+
+
