@@ -1,4 +1,4 @@
-package com.cydeo.pojo;
+package com.cydeo.pojoSpartans;
 
 public class Spartan {
         //to create pojo

@@ -1,8 +1,8 @@
-package com.cydeo.pojo;
+package com.cydeo.pojoSpartans;
 
 import java.util.List;
 
-public class Search {
+public class SearchSpartans {
 
     private List<Spartan> content;
     private int totalElement ;

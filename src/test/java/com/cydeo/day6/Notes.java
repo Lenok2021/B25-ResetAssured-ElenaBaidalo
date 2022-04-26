@@ -113,7 +113,9 @@ public class Notes {
  *
  * How to create POJO class
  *
- *
+ *Lombok.org
+ * if you add some dependency
+ * add annotation and that we will do everything instead of you
  *
  *
  *
