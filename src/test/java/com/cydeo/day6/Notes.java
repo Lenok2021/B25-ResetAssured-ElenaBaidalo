@@ -25,11 +25,11 @@ public class Notes {
      * assertThat():
      * we verify the body!!!!!! we use matchers (is, equal...ext.)
      *
-     * how to get any header value =
-     * how to check if header exist????
+     * how to get any header value =header("Content-Encoding","gzip")
+     * how to check if header exist = header("Date",notNullValue())
      *
      * when we do body verification:
-     * WHEN  we deal with json collection (we want to get all teachers  =
+     * WHEN  we deal with json collection (we want to get all teachers  = teachers
      * we get ALLLLLL  first_name = ---->teachers.first_name
      * WHEN you want to get specific first_name from Json Object
      * you provide index =  --> students[0].firstName
@@ -39,7 +39,7 @@ public class Notes {
      * We need to verify Json body  we  need  EXTRACT response
      * then I store response in Json Object
      * and then I can to deserialization = BC you want to convert Json OBJECT to JAVA OBJECT
-     * WITH EXTRACT method you can RETURN status code  ext.  what  ever you want
+     * WITH EXTRACT method you can RETURN status code  ext.  whatever you want
      *
      * WE  USE  AS  method !!!!!!  to deserialize Json body to Java Object
      *
@@ -114,8 +114,9 @@ public class Notes {
  * How to create POJO class
  *
  *Lombok.org
- * if you add some dependency
- * add annotation and that we will do everything instead of you
+ * if you add some dependencies
+ * add annotation and that we will do everything instead of you type yourself
+ *
  *
  *
  *
