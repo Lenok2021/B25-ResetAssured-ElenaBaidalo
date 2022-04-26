@@ -7,6 +7,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -15,23 +17,37 @@ public class StudentCydeoPojoTest extends StudentCydeoBase {
 
     @Test
     public void test() {
-        Response response = given()
-                .accept(ContentType.JSON)
-                .pathParam("id", 24103)
+        Response response = given().
+                accept(ContentType.JSON)
+                .and()
+                .pathParam("abc",24103)
                 .when()
-                .get("/student/{id}");
+                .get("/student/{abc}")
+                .then()
+                .statusCode(200)
+                .and()
+                .contentType("application/json;charset=UTF-8")
+                .and()
+                .header("Content-Encoding","gzip")
+                .and()
+                .header("Date",notNullValue())
+                .body("students[0].firstName", is("Karole"))
+                .extract().response();
 
-        assertEquals(200, response.statusCode());
-        assertEquals("application/json;charset=UTF-8", response.contentType());
-        assertEquals("gzip", response.getHeader("Content-Encoding"));
-        assertTrue(response.headers().hasHeaderWithName("Date"));
 
-        System.out.println("response.body().prettyPrint() = " + response.body().prettyPrint());
-
+        // get Json Object
         JsonPath jsonPath = response.jsonPath();
 
-        String firstName = jsonPath.getString("firstName");
 
+
+
+        assertEquals("Karole", jsonPath.getString("students[0].firstName"));
+
+        assertEquals("Master of Creative Arts", jsonPath.getString("students[0].major"));
+        assertEquals("hassan.lebsack@hotmail.com", jsonPath.getString("students[0].contact.emailAddress"));
+        assertEquals("Legacy Integration Analyst", jsonPath.getString("students[0].company.companyName"));
+        assertEquals("6253 Willard Place", jsonPath.getString("students[0].company.address.street"));
+        assertEquals(28524, jsonPath.getInt("students[0].company.address.zipCode"));
 
 
         //payload/body verification
@@ -45,13 +61,6 @@ public class StudentCydeoPojoTest extends StudentCydeoBase {
         zipCode 28524                             --> students[0].company.address.zipCode
          */
 
-        assertEquals("Karole", jsonPath.getString("students[0].firstName"));
-
-        assertEquals("Master of Creative Arts", jsonPath.getString("students[0].major"));
-        assertEquals("hassan.lebsack@hotmail.com", jsonPath.getString("students[0].contact.emailAddress"));
-        assertEquals("Legacy Integration Analyst", jsonPath.getString("students[0].company.companyName"));
-        assertEquals("6253 Willard Place", jsonPath.getString("students[0].company.address.street"));
-        assertEquals(28524, jsonPath.getInt("students[0].company.address.zipCode"));
 
 
     }
