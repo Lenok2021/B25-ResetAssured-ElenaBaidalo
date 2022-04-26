@@ -103,14 +103,15 @@ public class Notes {
  * you can Have design abd use just get method and you  want to get
  * whatever you want
  *
- *WE WANT  to create classes and archive feasibility
- *WE WANT  to store Json response in my custom classes
+ *WE WANT  to create classes and archive responsibility *WE WANT  to store Json response in my custom classes
  * And I will have ready getter methods and get bi id, name, e-mail
  * bla-bla-bla
  *
  * LOG() ALL()  you  CAN add  to request  and response!!!!!!!!!!!!!!!!
  * LOG() BODY(),  STATUS.CODE()  you can print out what ever you want
  *
+ *
+ * How to create POJO class
  *
  *
  *

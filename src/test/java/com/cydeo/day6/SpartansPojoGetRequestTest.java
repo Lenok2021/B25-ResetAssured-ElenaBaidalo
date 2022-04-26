@@ -1,5 +1,6 @@
 package com.cydeo.day6;
 
+import com.cydeo.pojo.Search;
 import com.cydeo.pojo.Spartan;
 import com.cydeo.utilities.SpartansTestBase;
 import io.restassured.http.ContentType;
@@ -63,4 +64,25 @@ public class SpartansPojoGetRequestTest extends SpartansTestBase {
 
     }
 
-}
+    @DisplayName("GET one spartan from search endpoint and use POJO")
+    @Test
+    public void test3() {
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .when().get("/api/spartans/search")
+                .then().statusCode(200)
+                .extract().response();
+
+        //get the full content json and convert it to Search object
+        Search searchResult = response.as(Search.class);
+
+        System.out.println(searchResult.getTotalElement());
+        System.out.println(searchResult.getContent().get(1).getName());
+
+
+    }
+
+
+
+    }
