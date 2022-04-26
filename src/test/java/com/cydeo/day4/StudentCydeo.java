@@ -1,5 +1,6 @@
 package com.cydeo.day4;
 
+import com.cydeo.utilities.StudentCydeoBase;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
@@ -14,13 +15,10 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StudentCydeo {
+public class StudentCydeo extends StudentCydeoBase {
 
 
-    @BeforeAll
-    public static void init() {
-        RestAssured.baseURI = "http://api.cybertektraining.com";
-    }
+
 
     @Test
     public void test1(){
@@ -59,7 +57,7 @@ public class StudentCydeo {
         JsonPath jsonPath = response.jsonPath();
 
         String firstName = jsonPath.getString("firstName");
-        int batch = jsonPath.getInt("batch");
+
 
         //payload/body verification
         /*
