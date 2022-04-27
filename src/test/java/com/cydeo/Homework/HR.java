@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -94,11 +96,10 @@ public class HR extends HrTestBase {
         assertEquals(25, jsonPath.getInt("count"));
 
 
-
     }
 
     @Test
-    public void test3(){
+    public void test3() {
 
         /*
         Q3:
@@ -117,27 +118,27 @@ public class HR extends HrTestBase {
 
         Response response = given()
                 .accept(ContentType.JSON)
-                .queryParam("q","{\"region_id\":3}")
+                .queryParam("q", "{\"region_id\":3}")
                 .when()
-                .get("/countries") ;
+                .get("/countries");
 
-           assertEquals(200, response.statusCode());
-           assertEquals("application/json",response.contentType());
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
 
-           // And all regions_id is 3
-        JsonPath jsonPath = response.jsonPath() ;
+        // And all regions_id is 3
+        JsonPath jsonPath = response.jsonPath();
         List<Integer> allRegionsID = jsonPath.getList("items.region_id");
         for (Integer each : allRegionsID) {
-            assertTrue(each ==3);
+            assertTrue(each == 3);
         }
 
-          //  - And count is 6
+        //  - And count is 6
         int count = jsonPath.getInt("count");
-        assertTrue(count==6);
+        assertTrue(count == 6);
         //- And hasMore is false
 
         boolean hasMore = jsonPath.getBoolean("hasMore");
-        assertTrue(hasMore==false);
+        assertTrue(hasMore == false);
 
         //all countries
         //Country_name are;
@@ -145,14 +146,170 @@ public class HR extends HrTestBase {
         List<String> country_names = jsonPath.getList("items.country_name");
         System.out.println("country_names = " + country_names);
 
-        List<String> expectedCountryNames = new ArrayList<>(Arrays.asList( "Australia", "China", "India", "Japan", "Malaysia", "Singapore"));
+        List<String> expectedCountryNames = new ArrayList<>(Arrays.asList("Australia", "China", "India", "Japan", "Malaysia", "Singapore"));
         System.out.println("expectedCountryNames = " + expectedCountryNames);
 
-        assertEquals(expectedCountryNames,country_names);
+        assertEquals(expectedCountryNames, country_names);
 
 
     }
 
+    @Test
+    public void test4() {
+     /*
+        ORDS API:
+Q1:
+- Given accept type is Json
+- Path param value- US
+- When users sends request to /countries
+- Then status code is 200
+- And Content - Type is Json
+- And country_id is US
+- And Country_name is United States of America
+- And Region_id is
+      */
+        Response response = given()
+                .accept(ContentType.JSON)
+                .pathParam("id", "US")
+                .when()
+                .get("/countries/{id}");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+        assertEquals(response.header("Transfer-Encoding"), "chunked");
+        assertTrue(response.headers().exist(), "Date");
+        assertTrue(response.headers().hasHeaderWithName("ETag"));
+
+        assertTrue(response.body().asString().contains("United States of America"));
+
+
+    }
+
+
+    @Test
+    public void test5() {
+/*
+        ORDS API:
+        Q1:
+        - Given accept type is Json
+        - Path param value- US
+                - When users sends request to /countries
+                - Then status code is 200
+                - And Content - Type is Json
+        - And country_id is US
+                - And Country_name is United States of America
+        - And Region_id is
+      */
+
+        Response response = given()
+                .accept(ContentType.JSON)
+                .pathParam("id", "US")
+                .when()
+                .get("/countries/{id}");
+
+        assertEquals(200, response.statusCode());
+        assertEquals("application/json", response.contentType());
+        System.out.println(response.body().prettyPrint());
+
+        JsonPath jsonPath = response.jsonPath();
+
+        String countryId = jsonPath.getString("country_id");
+        System.out.println("countryId = " + countryId);
+        String countryName = jsonPath.getString("country_name");
+        System.out.println("countryName = " + countryName);
+        int regionId = jsonPath.getInt("region_id");
+        System.out.println("regionId = " + regionId);
+
+    }
+
+    @Test
+    public void test6(){
+        /*
+        ORDS API:
+        Q1:
+        - Given accept type is Json
+        - Path param value- US
+                - When users sends request to /countries
+                - Then status code is 200
+                - And Content - Type is Json
+        - And country_id is US
+                - And Country_name is United States of America
+        - And Region_id is
+      */
+
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("id","US")
+                .when().get("/countries/{id}")
+                .then()
+                .and()
+                .statusCode(200)
+                .and()
+                .contentType("application/json")
+                .and().body("country_id",is("US"))
+                .and().body("country_name", is("United States of America"))
+                .and().body("region_id",is(2))
+                .and().body("country_name", startsWith("United"))
+                .and().body("country_name", containsString("of"));
+
+
+
+
+    }
+
+    @Test
+    public void test7(){
+          Response response = given()
+                  .accept(ContentType.JSON)
+                  .pathParam("id",10)
+                  .when()
+                  .get("/departments/{id}")
+                  .then()
+                  .statusCode(200)
+                  .contentType("application/json")
+                  .extract().response();
+
+        System.out.println(response.prettyPrint());
+
+        Map<String, Object> map = response.as(Map.class) ;
+
+
+        // i meant to print all keys
+
+        for (String eachKey : map.keySet()) {
+
+            System.out.print(eachKey);
+
+        }
+
+        // I want to print all value
+
+        for (Object eachValue : map.values()) {
+            System.out.println("eachValue = " + eachValue);
+        }
+
+        // I want to print value=kye
+
+        for (Map.Entry<String, Object> stringObjectEntry : map.entrySet()) {
+            System.out.println(stringObjectEntry);
+
+        }
+
+
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+    }
 
 
 }

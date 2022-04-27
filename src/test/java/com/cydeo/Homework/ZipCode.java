@@ -33,16 +33,6 @@ public class ZipCode extends ZipCodeBase {
     @Test
     public void test_path() {
 
-        Response response = given()
-                .accept(ContentType.JSON)
-                .pathParam("id", 22031)
-                .when()
-                .get("/us/{id}");
-
-        assertEquals(200, response.statusCode());
-        assertEquals("application/json", response.contentType());
-
-        System.out.println(response.body().prettyPrint());
 
 
     }

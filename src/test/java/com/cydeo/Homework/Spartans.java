@@ -7,11 +7,13 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Spartans extends SpartansTestBase {
 
@@ -278,7 +280,7 @@ public class Spartans extends SpartansTestBase {
         assertEquals("application/json", response.contentType());
         System.out.println("response.body().prettyPrint() = " + response.body().prettyPrint());
 
-        JsonPath jsonPath =  response.jsonPath() ;
+        JsonPath jsonPath = response.jsonPath();
 
         int id = jsonPath.getInt("id");
         String name = jsonPath.getString("name");
@@ -290,7 +292,65 @@ public class Spartans extends SpartansTestBase {
         System.out.println("gender = " + gender);
         System.out.println("phone = " + phone);
 
-        assertEquals(10,id);
+        assertEquals(10, id);
+
+    }
+
+    @Test
+    public void test14() {
+
+        /*
+         * Given accept type is json
+         * And path param id is 10
+         * When user sends a get request to "api/spartans/{id}"
+         * Then status code is 200
+         * And content-type is "application/json"
+         * And response payload values match the following:
+         * id is 10,
+         * name is "Lorenza",
+         * gender is "Female",
+         * phone is 3312820936
+         */
+
+        given()
+                .accept(ContentType.JSON)
+                .pathParam("id", 23)
+                .when()
+                .get("/api/spartans/{id}")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .contentType("application/json")
+                .header("Date", notNullValue())
+                .header("Transfer-Encoding", "chunked")
+                .and().body("id", is(23))
+                .and().body("name", is("Mervin"))
+                .and().body("gender", is("Male"))
+                .and().body("phone", is(9098436816L));
+
+    }
+
+
+    @Test
+    public void test15() {
+        Response response =
+                given()
+                        .accept(ContentType.JSON)
+                        .when()
+                        .get("/api/spartans")
+                        .then()
+                        .statusCode(200)
+                        .contentType("application/json")
+                        .and().header("Transfer-Encoding", "chunked")
+                        .and().header("Keep-Alive", "timeout=60")
+                        .and().header("Date", notNullValue())
+                        .and().header("Connection", notNullValue())
+                        .extract().response();
+
+
+        List<Map<String, Object>> map = response.as(List.class);
+
+        System.out.println("map.get(7).get(\"name\") = " + map.get(7).get("name"));
 
 
 
@@ -299,8 +359,11 @@ public class Spartans extends SpartansTestBase {
     }
 
 
-
 }
+
+
+
+
 
 
 
