@@ -78,6 +78,9 @@ public class SpartansPojoGetRequestTest extends SpartansTestBase {
 
         //get the full content json and convert it to Search object
         SearchSpartans searchResult = response.as(SearchSpartans.class);
+        //  WHEN  YOU  USE RESPONSE AS WE CREATED ONE MORE SEARCH CLASS
+        // AND STORE ALL SPARTANS AS  A LIST  AND THEN WE USE JAVA METHODS AND
+        // GET ACCESS TO SPECIFIC JSON (SPARTAN)
 
         System.out.println(searchResult.getTotalElement());
         System.out.println(searchResult.getContent().get(1).getName());
@@ -96,6 +99,12 @@ public class SpartansPojoGetRequestTest extends SpartansTestBase {
 
         JsonPath jsonPath = response.jsonPath();
 
+
+        // WHEN  YOU  USE JSONPATH YOU CAN USE PATH= CONTENT AND SAVE AS A LIST
+        // AND YOU DO NOT NEED TO CREAT A SEARCH CLASS
+        // THAT DEPENDS ON YOU
+        // WHEN YOU HAVE A DEAL WITH ARRAY AF JASON
+        // YOU  CAN USE JSONPATH METHOD = GETLIST  AND CONVERT JSON TO JAVA LIST IN ONE STEP
         List<Spartan> content = jsonPath.getList("content", Spartan.class);
 
         System.out.println(content.get(1).getName());

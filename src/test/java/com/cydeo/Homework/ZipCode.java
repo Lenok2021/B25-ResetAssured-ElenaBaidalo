@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -124,6 +123,54 @@ public class ZipCode extends ZipCodeBase {
         assertEquals("Fairfax", place.getPlaceName());
         assertEquals("Virginia", place.getState());
         assertEquals("38.8604", place.getLatitude());
+
+    }
+
+    @Test
+    public void negativeTest() {
+     /*
+     Given Accept application/json
+And path zipcode is 50000
+When I send a GET request to /us endpoint
+Then status code must be 404
+And content type must be application/json
+
+      */
+    }
+
+
+    @Test
+    public void test3(){
+        /*
+        Given Accept application/json
+        And path state is va
+        And path city is farifax
+        When I send a GET request to /us endpoint
+        Then status code must be 200
+        And content type must be application/json
+        And payload should contains following information
+        country abbreviation is US
+        country  United States
+        place name  Fairfax
+        each places must contain fairfax as a value
+        each post code must start with 22
+        */
+
+        given()
+                .pathParam("state","VA")
+                .and()
+                .pathParam("city", "Fairfax")
+                .when()
+                .get("/us/{state}/{city}")
+                .then()
+                .statusCode(200)
+                .contentType("application/json")
+                .and().body("'country abbreviation'",is("US"),
+                        "'place name'", is("Fairfax"),
+                        "places.'place name'",everyItem(containsString("Fairfax")),
+                        "places.'post code'",everyItem(startsWith("22")));
+
+
 
     }
 

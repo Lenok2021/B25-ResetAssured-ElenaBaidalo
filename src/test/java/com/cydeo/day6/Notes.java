@@ -21,25 +21,29 @@ public class Notes {
      * AFTER then() we start RESPONSE validation
      * and WE DON'T NEED  to create Response OBJECT
      * when you put status.code(200) = EXPECTED result
+     * content_type
      * ACTUAL we get from API = but we don't  put that
      * assertThat():
-     * we verify the body!!!!!! we use matchers (is, equal...ext.)
-     *
+     * we verify the  Json body!!!!!! we use Hamcrest matchers (is, equal...ext.)
+     * we  provide only expected result
      * how to get any header value =header("Content-Encoding","gzip")
      * how to check if header exist = header("Date",notNullValue())
+     * HEADER is dynamic That's  why we can check that NOTNULLVALUE
      *
      * when we do body verification:
-     * WHEN  we deal with json collection (we want to get all teachers  = teachers
+     * WHEN  we deal with json collection (we want to get all teachers  = teachers.first_name
      * we get ALLLLLL  first_name = ---->teachers.first_name
      * WHEN you want to get specific first_name from Json Object
      * you provide index =  --> students[0].firstName
      *
-     * EXTRACT  method!!!!!!
+     * EXTRACT  method!!!!!!  aseertthat and  and() hovet over on method
      *
-     * We need to verify Json body  we  need  EXTRACT response
+     * if you do not want to verify the Json body inside the MAP
+     * We need to verify Json body  we  need  EXTRACT response  after then()
      * then I store response in Json Object
      * and then I can to deserialization = BC you want to convert Json OBJECT to JAVA OBJECT
-     * WITH EXTRACT method you can RETURN status code  ext.  whatever you want
+     * WITH EXTRACT method you can RETURN status code
+     * ,response,jsonpath ext.  whatever you want
      *
      * WE  USE  AS  method !!!!!!  to deserialize Json body to Java Object
      *
@@ -61,7 +65,7 @@ public class Notes {
      *
      * WHAT  is SYNTAX SUGAR?????????
      *
-     * Json Object {}
+     * Json Object {}  curly braces = key  value
      * when we call students all
      * when you see {} = this is Json Object
      * when you see [] = is Array
@@ -106,6 +110,8 @@ public class Notes {
  *WE WANT  to create classes and archive responsibility *WE WANT  to store Json response in my custom classes
  * And I will have ready getter methods and get bi id, name, e-mail
  * bla-bla-bla
+ *
+ * WE WANT TO STORE JSON RESPONSE IN CUSTOM CLASSES
  *
  * LOG() ALL()  you  CAN add  to request  and response!!!!!!!!!!!!!!!!
  * LOG() BODY(),  STATUS.CODE()  you can print out what ever you want
